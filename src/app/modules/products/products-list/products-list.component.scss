@@ -21,9 +21,40 @@
   color: #1976d2;
 }
 
+/* 📌 Estilo dos filtros de categoria */
+.categories {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.categories button {
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.categories button:hover {
+  background: #1976d2;
+  color: white;
+}
+
+.categories button.active {
+  background: #1976d2;
+  color: white;
+  font-weight: bold;
+  border: 2px solid #125699;
+}
+
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Garante sempre 3 produtos por linha */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 24px;
   justify-content: center;
 }
@@ -38,7 +69,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 280px; /* Garante que os cards tenham um tamanho mínimo */
 }
 
 .product-card:hover {
@@ -96,20 +126,42 @@ button svg {
 }
 
 /* Responsividade */
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 900px) {
   .products-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 produtos por linha em telas médias */
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 600px) {
   .products-grid {
-    grid-template-columns: repeat(2, 1fr); /* Ainda mantém 2 produtos em telas menores */
+    grid-template-columns: repeat(1, 1fr);
   }
 }
 
-@media screen and (max-width: 500px) {
-  .products-grid {
-    grid-template-columns: repeat(1, 1fr); /* 1 produto por linha em telas muito pequenas */
+
+.category-filters {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  button {
+    background: #f1f1f1;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+
+    &.active {
+      background: #1976d2;
+      color: white;
+    }
+
+    &:hover {
+      background: #125699;
+      color: white;
+    }
   }
 }

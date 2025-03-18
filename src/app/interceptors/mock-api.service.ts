@@ -20,6 +20,10 @@ export class MockApiInterceptor implements HttpInterceptor {
         responseBody = MOCK_PRODUCTS;
         break;
 
+      case req.url.includes('/api/products/categories'):
+         responseBody = MOCK_CATEGORIES;
+        break;
+
       default:
         return next.handle(req); // Se não for um endpoint mocado, segue normalmente
     }
