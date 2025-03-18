@@ -5,6 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MockApiInterceptor } from './interceptors/mock-api.service';
+import { environment } from '.././environments/environment'; // 🔥 Importa o environment
 
 @NgModule({
   declarations: [
@@ -13,10 +14,10 @@ import { MockApiInterceptor } from './interceptors/mock-api.service';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule // ✅ Necessário para requisições HTTP
+    HttpClientModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: MockApiInterceptor, multi: true }
+    ...(environment.useMockApi ? [{ provide: HTTP_INTERCEPTORS, useClass: MockApiInterceptor, multi: true }] : [])
   ],
   bootstrap: [AppComponent]
 })

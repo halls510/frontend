@@ -16,15 +16,21 @@ export class ProductsListComponent implements OnInit {
     this.loadProducts();
   }
 
-  loadProducts(): void {
-    this.productsService.getProducts().subscribe((data: Product[]) => { // ✅ Tipagem correta
-      this.products = data.map(product => ({
-        ...product,
-        imageUrl: product.imageUrl || 'assets/default-product.jpg'
-      }));
+  loadProducts(): void {    
+    this.productsService.getProducts().subscribe(response => { 
+      if (response && response.data) { // 🔥 Verifica se 'response' e 'response.data' existem
+        this.products = response.data.map((product: Product) => ({
+          ...product,
+          imageUrl: product.imageUrl || 'assets/default-product.jpg'
+        }));
+      } else {
+        console.warn('⚠️ Nenhum produto encontrado.');
+      }
+    }, error => {
+      console.error('❌ Erro ao carregar produtos:', error);
     });
   }
-
+  
   addToCart(product: Product): void {
     console.log(`✅ Produto adicionado ao carrinho: ${product.name}`);
     alert(`${product.name} foi adicionado ao carrinho!`);
