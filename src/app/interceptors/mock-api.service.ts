@@ -15,13 +15,13 @@ export class MockApiInterceptor implements HttpInterceptor {
       case req.url.includes('/api/users'):
         responseBody = MOCK_USERS;
         break;
-      
-      case req.url.includes('/api/products'):
-        responseBody = MOCK_PRODUCTS;
-        break;
 
       case req.url.includes('/api/products/categories'):
          responseBody = MOCK_CATEGORIES;
+        break;        
+      
+      case req.url.includes('/api/products'):
+        responseBody = MOCK_PRODUCTS;
         break;
 
       default:

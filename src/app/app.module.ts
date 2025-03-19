@@ -9,10 +9,14 @@ import { MockApiInterceptor } from './interceptors/mock-api.service';
 import { environment } from '.././environments/environment';
 import { AdminModule } from './modules/admin/admin.module'; // 🔥 Importa o environment
 import { ProductsManagementModule } from './modules/admin/pages/products-management/products-management.module';
+import { HomeComponent } from './modules/home/home.component';
+import { LoginComponent } from './modules/login/login.component';
 
 @NgModule({
   declarations: [
-    AppComponent    
+    AppComponent,
+    HomeComponent,
+    LoginComponent    
   ],
   imports: [
     BrowserModule,

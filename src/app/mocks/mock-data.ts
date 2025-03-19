@@ -3,7 +3,10 @@ export const MOCK_USERS = {
   			{ id: 1, name: 'Ana Souza', email: 'ana.souza@email.com' },
   			{ id: 2, name: 'Carlos Oliveira', email: 'carlos.oliveira@email.com' },
   			{ id: 3, name: 'Mariana Lima', email: 'mariana.lima@email.com' }
-		]
+		],
+	success: true,
+  	message: '',
+  	errors: []		
 };
 
 export const MOCK_PRODUCTS = { 
@@ -80,10 +83,16 @@ export const MOCK_PRODUCTS = {
 		  count: 100
 		}
 	  }
-	]
+	],
+	success: true,
+  	message: '',
+  	errors: []
   };
   
 
 export const MOCK_CATEGORIES = {
-  data: ['Eletrônicos', 'Acessórios', 'Games', 'Móveis']
+  data: ['Cervejas', 'Vinhos'],
+  success: true,
+  message: '',
+  errors: []
 };
