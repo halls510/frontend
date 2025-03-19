@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs'; // ✅ Adicionando "of"
 import { catchError } from 'rxjs/operators'; // ✅ Importando "catchError"
+import { AnonymousSubject } from 'rxjs/internal/Subject';
+import { CategoriesResponse } from '../models/category.model';
+import { ProductsResponse, Product, ProductRequest, ProductResponse } from '../models/product.model';
 
 const API_URL = '/api/products';
 
@@ -11,12 +14,12 @@ const API_URL = '/api/products';
 export class ProductsService {
   constructor(private http: HttpClient) {}
 
-  getProducts(): Observable<any> {  
-    return this.http.get(API_URL);
+  getProducts(): Observable<ProductsResponse> {  
+    return this.http.get<ProductsResponse>(API_URL);
   }
 
-  getCategories(): Observable<string[]> {
-    return this.http.get<string[]>(`${API_URL}/categories`);
+  getCategories(): Observable<CategoriesResponse> {
+    return this.http.get<CategoriesResponse>(`${API_URL}/categories`);
   }
 
   getProductById(id: number): Observable<any> {
@@ -27,8 +30,8 @@ export class ProductsService {
     return this.http.post(API_URL, product);
   }
 
-  updateProduct(id: number, product: any): Observable<any> {
-    return this.http.put(`${API_URL}/${id}`, product);
+  updateProduct(id: number, product: ProductRequest): Observable<ProductResponse> {
+    return this.http.put<ProductResponse>(`${API_URL}/${id}`, product);
   }
 
   deleteProduct(id: number): Observable<any> {

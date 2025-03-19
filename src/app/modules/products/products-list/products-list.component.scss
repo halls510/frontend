@@ -31,13 +31,16 @@
 }
 
 .categories button {
-  background: #f0f0f0;
-  border: 1px solid #ddd;
+  background: #555; /* 🔹 Cor mais escura */
+  border: 1px solid #444; /* 🔹 Borda mais destacada */
+  color: #ddd; /* 🔹 Melhor contraste */
   padding: 10px 15px;
   cursor: pointer;
   border-radius: 5px;
   font-size: 16px;
   transition: all 0.3s ease;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 🔹 Leve sombra para destaque */
 }
 
 .categories button:hover {
@@ -52,6 +55,7 @@
   border: 2px solid #125699;
 }
 
+/* Grid de produtos */
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -125,7 +129,7 @@ button svg {
   fill: white;
 }
 
-/* Responsividade */
+/* 🔹 Melhorando a responsividade */
 @media screen and (max-width: 900px) {
   .products-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -138,30 +142,32 @@ button svg {
   }
 }
 
-
+/* 🔹 Ajuste na seção de filtros */
 .category-filters {
   display: flex;
   justify-content: center;
   gap: 10px;
   margin-bottom: 20px;
+}
 
-  button {
-    background: #f1f1f1;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background 0.3s ease;
+.category-filters button {
+  background: #555; /* 🔹 Mantendo a cor escura */
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #ddd; /* 🔹 Melhor contraste */
+  transition: background 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 🔹 Leve sombra */
+}
 
-    &.active {
-      background: #1976d2;
-      color: white;
-    }
+.category-filters button.active {
+  background: #1976d2;
+  color: white;
+}
 
-    &:hover {
-      background: #125699;
-      color: white;
-    }
-  }
+.category-filters button:hover {
+  background: #125699;
+  color: white;
 }

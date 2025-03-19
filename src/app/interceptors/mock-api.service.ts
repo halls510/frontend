@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { MOCK_USERS, MOCK_PRODUCTS } from '../mocks/mock-data';
+import { MOCK_USERS, MOCK_PRODUCTS, MOCK_CATEGORIES } from '../mocks/mock-data';
 
 @Injectable()
 export class MockApiInterceptor implements HttpInterceptor {

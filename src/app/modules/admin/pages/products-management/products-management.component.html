@@ -1,0 +1,61 @@
+<div class="products-management">
+  <h1>Gerenciamento de Produtos</h1>
+
+  <div class="actions">
+      <button (click)="openCreateModal()">Adicionar Produto</button>
+      <input type="text" [(ngModel)]="searchQuery" placeholder="Buscar produto..." />
+  </div>
+
+  <table>
+      <thead>
+          <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Preço</th>
+              <th>Categoria</th>
+              <th>Imagem</th>
+              <th>Ações</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let product of filteredProducts()">
+              <td>{{ product.id }}</td>
+              <td>{{ product.title }}</td>
+              <td>R$ {{ product.price | number:'1.2-2' }}</td>
+              <td>{{ product.category }}</td>
+              <td>
+                  <img *ngIf="product.image" [src]="product.image" alt="{{ product.title }}" width="50" />
+              </td>
+              <td>
+                  <button (click)="editProduct(product)">Editar</button>
+                  <button class="delete" (click)="deleteProduct(product.id)">Excluir</button>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+</div>
+
+<!-- Modal de Adição/Edição -->
+<div class="modal" *ngIf="showModal">
+  <div class="modal-content">
+      <h2>{{ isEditing ? 'Editar Produto' : 'Adicionar Produto' }}</h2>
+      
+      <label>Nome:</label>
+      <input type="text" [(ngModel)]="newProduct.title" placeholder="Nome do Produto" />
+
+      <label>Preço:</label>
+      <input type="number" [(ngModel)]="newProduct.price" placeholder="Preço" />
+
+      <label>Categoria:</label>
+      <select [(ngModel)]="newProduct.category">
+          <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+      </select>
+
+      <label>Imagem:</label>
+      <input type="file" (change)="handleImageUpload($event)" />
+      <img *ngIf="newProduct.image" [src]="newProduct.image" alt="Preview da Imagem" width="100" />
+
+      <button (click)="uploadImageAndSaveProduct()">Salvar</button>
+      <button class="cancel" (click)="closeCreateModal()">Cancelar</button>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 <div class="container">
   <h2 class="title">Produtos Disponíveis</h2>
 
-  <!-- ✅ Filtro de categorias -->
+  <!-- Filtro de categorias -->
   <div class="category-filters">
     <button *ngFor="let category of categories"
             [class.active]="category === selectedCategory"
@@ -10,11 +10,11 @@
     </button>
   </div>
 
-  <!-- ✅ Grid de produtos filtrados -->
+  <!-- Grid de produtos filtrados -->
   <div class="products-grid">
     <div class="product-card" *ngFor="let product of filteredProducts">
-      <img [src]="product.imageUrl || 'assets/default-product.jpg'" alt="{{ product.name }}">
-      <h3>{{ product.name }}</h3>
+      <img [src]="product.image || 'assets/default-product.jpg'" alt="{{ product.title }}">
+      <h3>{{ product.title }}</h3>
       <p class="price">R$ {{ product.price | currency:'BRL' }}</p>
       <button (click)="addToCart(product)">Adicionar ao Carrinho</button>
     </div>
