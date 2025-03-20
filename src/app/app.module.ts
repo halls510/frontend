@@ -6,17 +6,17 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MockApiInterceptor } from './interceptors/mock-api.service';
-import { environment } from '.././environments/environment';
-import { AdminModule } from './modules/admin/admin.module'; // 🔥 Importa o environment
+import { environment } from '../environments/environment'; // ✅ Corrigida a importação do environment
+import { AdminModule } from './modules/admin/admin.module';
 import { ProductsManagementModule } from './modules/admin/pages/products-management/products-management.module';
-import { HomeComponent } from './modules/home/home.component';
-import { LoginComponent } from './modules/login/login.component';
+import { LoginModule } from './modules/login/login.module';
+import { HomeModule } from './modules/home/home.module';
+import { AuthService } from './services/auth.service';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    HomeComponent,
-    LoginComponent    
+    AppComponent       
   ],
   imports: [
     BrowserModule,
@@ -24,11 +24,57 @@ import { LoginComponent } from './modules/login/login.component';
     HttpClientModule,
     AdminModule,
     ProductsManagementModule,
-    FormsModule
+    FormsModule,
+    HomeModule,
+    LoginModule 
   ],
   providers: [
-    ...(environment.useMockApi ? [{ provide: HTTP_INTERCEPTORS, useClass: MockApiInterceptor, multi: true }] : [])
+    AuthService, // ✅ Certifique-se de que o AuthService está disponível globalmente
+
+    // ✅ O MockApiInterceptor só será usado se o ambiente estiver configurado para mock
+    ...(environment.useMockApi ? [{ provide: HTTP_INTERCEPTORS, useClass: MockApiInterceptor, multi: true }] : []),
+
+    // ✅ O AuthInterceptor SEMPRE será utilizado
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+
+// import { NgModule } from '@angular/core';
+// import { BrowserModule } from '@angular/platform-browser';
+// import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+// import { FormsModule } from '@angular/forms';
+
+// import { AppRoutingModule } from './app-routing.module';
+// import { AppComponent } from './app.component';
+// import { MockApiInterceptor } from './interceptors/mock-api.service';
+// import { environment } from '.././environments/environment';
+// import { AdminModule } from './modules/admin/admin.module'; // 🔥 Importa o environment
+// import { ProductsManagementModule } from './modules/admin/pages/products-management/products-management.module';
+// import { LoginComponent } from './modules/login/login.component';
+// import { HomeModule } from './modules/home/home.module';
+// import { AuthService } from './services/auth.service';
+// import { AuthInterceptor } from './interceptors/auth.interceptor';
+
+// @NgModule({
+//   declarations: [
+//     AppComponent,    
+//     LoginComponent    
+//   ],
+//   imports: [
+//     BrowserModule,
+//     AppRoutingModule,
+//     HttpClientModule,
+//     AdminModule,
+//     ProductsManagementModule,
+//     FormsModule,
+//     HomeModule
+//   ],
+//   providers: [
+//     ...(environment.useMockApi ? [{ provide: HTTP_INTERCEPTORS, useClass: MockApiInterceptor, multi: true }] : [])
+//   ],
+//   bootstrap: [AppComponent]
+// })
+// export class AppModule { }

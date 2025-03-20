@@ -1,9 +1,9 @@
 <div class="login-container">
   <h2>Login</h2>
   <form (submit)="login()">
-    <input type="text" [(ngModel)]="username" placeholder="Usuário" required />
-    <input type="password" [(ngModel)]="password" placeholder="Senha" required />
+    <input type="text" name="username" placeholder="Usuário" [(ngModel)]="username" required>
+    <input type="password" name="password" placeholder="Senha" [(ngModel)]="password" required>
     <button type="submit">Entrar</button>
   </form>
-  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
 </div>

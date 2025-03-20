@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductsService } from '../../services/products.service';
 
 @Component({
   selector: 'app-home',
@@ -7,18 +6,11 @@ import { ProductsService } from '../../services/products.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  products: any[] = []; // Array para armazenar os produtos
 
-  constructor(private productsService: ProductsService) {}
+  constructor() {}
 
   ngOnInit(): void {
-    this.loadProducts();
+    // Nenhuma lógica de carregamento de produtos aqui, pois será tratado pelo ProductListComponent
   }
 
-  loadProducts(): void {
-    this.productsService.getProducts().subscribe({
-      next: (data) => this.products = data,
-      error: (error) => console.error('Erro ao carregar produtos:', error)
-    });
-  }
 }

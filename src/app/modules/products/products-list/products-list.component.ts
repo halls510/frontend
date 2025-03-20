@@ -44,6 +44,7 @@ export class ProductsListComponent implements OnInit {
           ...product,
           imageUrl: product.image || 'assets/default-product.jpg'
         }));
+        this.filteredProducts = this.products;
       } else {
         console.warn('Nenhum produto encontrado.');
       }

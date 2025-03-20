@@ -1,12 +1,3 @@
 <div class="home-container">
-  <h1>Lista de Produtos</h1>
-
-  <div class="products-grid">
-    <div class="product-card" *ngFor="let product of products">
-      <img [src]="product.image" alt="{{ product.title }}" />
-      <h3>{{ product.title }}</h3>
-      <p>{{ product.price | currency:'BRL' }}</p>
-      <button>Comprar</button>
-    </div>
-  </div>
+    <app-products-list></app-products-list>
 </div>

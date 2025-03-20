@@ -18,6 +18,9 @@ import { ProductsListComponent } from './products-list/products-list.component';
     ProductsRoutingModule,
     RouterModule,
     SharedModule  // Agora o SharedModule é importado
+  ],
+  exports: [
+    ProductsListComponent // Exportando para uso em outros módulos
   ]
 })
 export class ProductsModule { }

@@ -1,24 +1,23 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  username: string = '';
-  password: string = '';
-  errorMessage: string = '';
+  username = '';
+  password = '';
+  errorMessage = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
   login(): void {
-    if (this.authService.login(this.username, this.password)) {
-      this.router.navigate(['/admin']);
-    } else {
-      this.errorMessage = 'Usuário ou senha incorretos!';
-    }
+    this.authService.login(this.username, this.password).subscribe({
+      next: () => this.router.navigate(['/home']), // ✅ Redireciona após login bem-sucedido
+      error: () => this.errorMessage = 'Usuário ou senha inválidos'
+    });
   }
 }
