@@ -8,6 +8,7 @@ import { Observable, tap } from 'rxjs';
 })
 export class AuthService {
   private apiUrl = '/api/auth'; // 🔥 Substitua pelo endpoint correto da API
+  private debugMode = true; // Altere para 'false' quando quiser reativar o login
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -25,7 +26,7 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token'); // Verifica se o token está salvo
+    return this.debugMode || !!localStorage.getItem('token'); // Verifica se o token está salvo
   }
 
   getToken(): string | null {

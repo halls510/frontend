@@ -1,0 +1,102 @@
+<div class="users-management">
+  <h1>Gerenciamento de Usuários</h1>
+
+  <div class="actions">
+    <button (click)="openCreateModal()">➕ Adicionar Usuário</button>
+    <input type="text" [(ngModel)]="searchQuery" placeholder="🔍 Buscar usuário..." />
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Função</th>
+        <th>Status</th>
+        <th>Endereço</th>
+        <th>Geolocalização</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of filteredUsers()">
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.role }}</td>
+        <td [ngClass]="{'active': user.status === 'Active', 'inactive': user.status === 'Inactive'}">
+          {{ user.status }}
+        </td>
+        <td>
+          📌 {{ user.address.street }}, {{ user.address.number }}<br>
+          {{ user.address.city }} - {{ user.address.state }}<br>
+          {{ user.address.zipCode }}, {{ user.address.country }}
+        </td>
+        <td>
+          📍 Lat: {{ user.address.geolocation.lat }}<br>
+          📍 Long: {{ user.address.geolocation.long }}
+        </td>
+        <td>
+          <button class="edit" (click)="editUser(user)">✏️ Editar</button>
+          <button class="delete" (click)="deleteUser(user.id)">🗑️ Excluir</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal de Adição/Edição -->
+<div class="modal" *ngIf="showModal">
+  <div class="modal-content">
+    <h2>{{ isEditing ? '✏️ Editar Usuário' : '➕ Adicionar Usuário' }}</h2>
+
+    <label>Nome:</label>
+    <input type="text" [(ngModel)]="newUser.name" placeholder="Digite o nome" />
+
+    <label>Email:</label>
+    <input type="email" [(ngModel)]="newUser.email" placeholder="Digite o email" />
+
+    <label>Função:</label>
+    <select [(ngModel)]="newUser.role">
+      <option value="Admin">Admin</option>
+      <option value="Manager">Manager</option>
+      <option value="Customer">Customer</option>
+    </select>
+
+    <label>Status:</label>
+    <select [(ngModel)]="newUser.status">
+      <option value="Active">Ativo</option>
+      <option value="Inactive">Inativo</option>
+    </select>
+
+    <h3>Endereço</h3>
+    <label>Rua:</label>
+    <input type="text" [(ngModel)]="newUser.address.street" placeholder="Rua" />
+
+    <label>Número:</label>
+    <input type="text" [(ngModel)]="newUser.address.number" placeholder="Número" />
+
+    <label>Cidade:</label>
+    <input type="text" [(ngModel)]="newUser.address.city" placeholder="Cidade" />
+
+    <label>Estado:</label>
+    <input type="text" [(ngModel)]="newUser.address.state" placeholder="Estado" />
+
+    <label>CEP:</label>
+    <input type="text" [(ngModel)]="newUser.address.zipCode" placeholder="CEP" />
+
+    <label>País:</label>
+    <input type="text" [(ngModel)]="newUser.address.country" placeholder="País" />
+
+    <h3>Geolocalização</h3>
+    <label>Latitude:</label>
+    <input type="number" step="any" [(ngModel)]="newUser.address.geolocation.lat" placeholder="Latitude" />
+
+    <label>Longitude:</label>
+    <input type="number" step="any" [(ngModel)]="newUser.address.geolocation.long" placeholder="Longitude" />
+
+    <button class="save" (click)="saveUser()">💾 Salvar</button>
+    <button class="cancel" (click)="showModal = false">❌ Cancelar</button>
+  </div>
+</div>

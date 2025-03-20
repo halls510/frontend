@@ -1,21 +1,76 @@
-export const MOCK_USERS = {
+import { User } from '../models/user.model';
+
+export const MOCK_USERS: { data: User[]; success: boolean; message: string; errors: any[] } = {
   data: [
-  			{ id: 1, name: 'Ana Souza', email: 'ana.souza@email.com' },
-  			{ id: 2, name: 'Carlos Oliveira', email: 'carlos.oliveira@email.com' },
-  			{ id: 3, name: 'Mariana Lima', email: 'mariana.lima@email.com' }
-		],
-	success: true,
-  	message: '',
-  	errors: []		
+    { 
+      id: 1, 
+      name: 'Ana Souza', 
+      email: 'ana.souza@email.com', 
+      role: 'Admin', // ✅ Garantindo que está no formato correto
+      status: 'Active', 
+      address: {
+        street: 'Av. Paulista',
+        number: '123',
+        city: 'São Paulo',
+        state: 'SP',
+        zipCode: '01311-000',
+        country: 'Brasil',
+        geolocation: { lat: -23.561684, long: -46.656139 }
+      },
+      createdAt: new Date(), 
+      updatedAt: new Date() 
+    },
+    { 
+      id: 2, 
+      name: 'Carlos Oliveira', 
+      email: 'carlos.oliveira@email.com', 
+      role: 'Manager', // ✅ Corrigido para garantir consistência
+      status: 'Active', 
+      address: {
+        street: 'Rua XV de Novembro',
+        number: '456',
+        city: 'Curitiba',
+        state: 'PR',
+        zipCode: '80020-310',
+        country: 'Brasil',
+        geolocation: { lat: -25.429594, long: -49.271938 }
+      },
+      createdAt: new Date(), 
+      updatedAt: new Date() 
+    },
+    { 
+      id: 3, 
+      name: 'Mariana Lima', 
+      email: 'mariana.lima@email.com', 
+      role: 'Customer', // ✅ Corrigido para garantir consistência
+      status: 'Inactive', 
+      address: {
+        street: 'Rua das Flores',
+        number: '789',
+        city: 'Belo Horizonte',
+        state: 'MG',
+        zipCode: '30112-010',
+        country: 'Brasil',
+        geolocation: { lat: -19.922731, long: -43.945095 }
+      },
+      createdAt: new Date(), 
+      updatedAt: new Date() 
+    }
+  ],
+  success: true,
+  message: '',
+  errors: []
 };
+
+
 
 export const MOCK_PRODUCTS = { 
 	data: [
 	  {
 		id: 1,
-		name: "Cerveja Puro Malte",
+		title: "Cerveja Puro Malte",
 		price: 9.99,
-		image: "https://example.com/cerveja.jpg",
+		image: "https://minio-api.hallison.com.br/productsapisale/cerveja_puro_malte.png",
 		description: "Cerveja puro malte premium, 600ml.",
 		category: "Cervejas",
 		rating: {
@@ -25,9 +80,9 @@ export const MOCK_PRODUCTS = {
 	  },
 	  {
 		id: 2,
-		name: "Cerveja IPA Artesanal",
+		title: "Cerveja IPA Artesanal",
 		price: 14.99,
-		image: "https://example.com/ipa.jpg",
+		image: "https://minio-api.hallison.com.br/productsapisale/cerveja_puro_malte.png",
 		description: "Cerveja IPA de alta fermentação, amargor intenso, 500ml.",
 		category: "Cervejas",
 		rating: {
@@ -37,9 +92,9 @@ export const MOCK_PRODUCTS = {
 	  },
 	  {
 		id: 3,
-		name: "Cerveja Lager Premium",
+		title: "Cerveja Lager Premium",
 		price: 8.99,
-		image: "https://example.com/lager.jpg",
+		image: "https://minio-api.hallison.com.br/productsapisale/cerveja_puro_malte.png",
 		description: "Cerveja lager leve e refrescante, 600ml.",
 		category: "Cervejas",
 		rating: {
@@ -49,9 +104,9 @@ export const MOCK_PRODUCTS = {
 	  },
 	  {
 		id: 4,
-		name: "Cerveja Weiss Alemã",
+		title: "Cerveja Weiss Alemã",
 		price: 12.99,
-		image: "https://example.com/weiss.jpg",
+		image: "https://minio-api.hallison.com.br/productsapisale/cerveja_puro_malte.png",
 		description: "Cerveja de trigo com notas frutadas, 500ml.",
 		category: "Cervejas",
 		rating: {
@@ -61,9 +116,9 @@ export const MOCK_PRODUCTS = {
 	  },
 	  {
 		id: 5,
-		name: "Vinho Tinto Seco",
+		title: "Vinho Tinto Seco",
 		price: 59.99,
-		image: "https://example.com/vinho.jpg",
+		image: "https://minio-api.hallison.com.br/productsapisale/cerveja_puro_malte.png",
 		description: "Vinho tinto seco de alta qualidade, 750ml.",
 		category: "Vinhos",
 		rating: {
@@ -73,9 +128,9 @@ export const MOCK_PRODUCTS = {
 	  },
 	  {
 		id: 6,
-		name: "Vinho Branco Chardonnay",
+		title: "Vinho Branco Chardonnay",
 		price: 49.99,
-		image: "https://example.com/vinho-branco.jpg",
+		image: "https://minio-api.hallison.com.br/productsapisale/cerveja_puro_malte.png",
 		description: "Vinho branco suave e aromático, 750ml.",
 		category: "Vinhos",
 		rating: {

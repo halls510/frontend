@@ -46,10 +46,14 @@
       <label>Preço:</label>
       <input type="number" [(ngModel)]="newProduct.price" placeholder="Preço" />
 
-      <label>Categoria:</label>
-      <select [(ngModel)]="newProduct.category">
-          <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-      </select>
+    <label>Categoria:</label>
+<select [(ngModel)]="newProduct.category" (change)="checkNewCategory()">
+    <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+    <option value="other">Outro...</option> <!-- Adiciona opção para criar nova categoria -->
+</select>
+
+<!-- Campo de entrada para nova categoria -->
+<input *ngIf="isNewCategory" type="text" [(ngModel)]="newCategory" placeholder="Digite a nova categoria" />
 
       <label>Imagem:</label>
       <input type="file" (change)="handleImageUpload($event)" />

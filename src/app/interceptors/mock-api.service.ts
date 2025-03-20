@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { MOCK_USERS, MOCK_PRODUCTS, MOCK_CATEGORIES } from '../mocks/mock-data';
 
 @Injectable()
 export class MockApiInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log(`Interceptando requisição: ${req.url}`);
+    if (!environment.useMockApi) {
+      return next.handle(req); // ✅ Se mocks estiverem desativados, segue a requisição real
+    }
+
+    console.log(`📢 Interceptando requisição MOCK: ${req.url}`);
 
     let responseBody: any;
 
