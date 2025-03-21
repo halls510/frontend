@@ -84,6 +84,7 @@ export class ProductsManagementComponent implements OnInit {
     this.isNewCategory = this.newProduct.category === 'other';
   }
 
+/*
   // Método chamado ao selecionar um arquivo no <input type="file">
   handleImageUpload(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -91,6 +92,23 @@ export class ProductsManagementComponent implements OnInit {
       this.selectedFile = input.files[0]; // Guarda o arquivo para upload posterior
     }
   }
+  */
+
+  handleImageUpload(event: Event): void {
+  const input = event.target as HTMLInputElement;
+
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      this.newProduct.image = reader.result as string;
+    };
+
+    reader.readAsDataURL(file);
+  }
+}
+
   
   saveProduct(): void {
     if (this.isNewCategory && this.newCategory.trim() !== '') {

@@ -90,16 +90,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  overflow-y: auto;
 }
 
 .modal-content {
   background: white;
   padding: 20px;
   border-radius: 10px;
-  width: 400px;
-  text-align: center;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;      /* 🔥 evita estourar a tela */
+  overflow-y: auto;      /* 🔥 adiciona rolagem se necessário */
   display: flex;
   flex-direction: column;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+
+  h2, h3 {
+    margin-top: 10px;
+    text-align: center;
+  }
 
   label {
     text-align: left;
@@ -110,7 +121,7 @@
   input, select {
     width: 100%;
     margin: 5px 0 15px;
-    padding: 8px 8px 8px 0px;
+    padding: 8px 0px 8px 0px;
     border: 1px solid #ccc;
     border-radius: 5px;
   }
@@ -142,6 +153,7 @@
     }
   }
 }
+
 
 /* Responsividade */
 @media (max-width: 768px) {
