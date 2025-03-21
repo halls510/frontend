@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ProductsManagementComponent implements OnInit {
   searchQuery: string = '';
+  selectedFile: File | null = null;
   products: Product[] = [];
   categories: string[] = [];
   selectedCategory: string = 'Todos';
@@ -83,10 +84,14 @@ export class ProductsManagementComponent implements OnInit {
     this.isNewCategory = this.newProduct.category === 'other';
   }
 
-  handleImageUpload(event: any): void {
-    this.imageFile = event.target.files[0];
+  // Método chamado ao selecionar um arquivo no <input type="file">
+  handleImageUpload(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0]; // Guarda o arquivo para upload posterior
+    }
   }
-
+  
   saveProduct(): void {
     if (this.isNewCategory && this.newCategory.trim() !== '') {
       this.newProduct.category = this.newCategory;
@@ -112,22 +117,30 @@ export class ProductsManagementComponent implements OnInit {
     }
   }
 
-  uploadImageAndSaveProduct(): void {
-  if (!this.imageFile) {
-    this.saveProduct(); // ✅ Se não houver imagem, salva o produto diretamente
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append('file', this.imageFile);
-
-  this.http.post<{ url: string }>('/api/upload', formData).subscribe(response => {
-    this.newProduct.image = response.url;
-    this.saveProduct();
-  }, error => {
-    console.error('Erro ao fazer upload da imagem:', error);
-  });
-}
+    // Método para fazer upload da imagem para o servidor e obter a URL do MinIO
+    async uploadImageAndSaveProduct(): Promise<void> {
+      if (this.selectedFile) {
+        const formData = new FormData();
+        formData.append('file', this.selectedFile);
+  
+        try {
+          const response = await this.http.post<{ url: string }>(
+            '/api/upload', formData
+          ).toPromise();
+  
+          if (!response || !response.url) {
+            throw new Error('Erro ao obter a URL da imagem');
+          }
+  
+          this.newProduct.image = response.url; // Define a URL da imagem vinda do MinIO
+        } catch (error) {
+          console.error('Erro ao enviar a imagem:', error);
+          return;
+        }
+      }
+  
+      this.saveProduct(); // Salva o produto após obter a URL da imagem
+    }
 
 
   editProduct(product: Product): void {
