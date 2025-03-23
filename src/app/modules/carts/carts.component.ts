@@ -16,7 +16,6 @@ import { AuthService } from 'src/app/services/auth.service';
 export class CartsComponent implements OnInit {
   activeCart: CartResponse | null = null;
   productsMap = new Map<number, ProductModel>();
-  userId: number | null = null;
   isLoading = false;
   error: string | null = null;
 
@@ -26,21 +25,22 @@ export class CartsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userId = this.authService.getUserId();
-    if (!this.userId) {
+    const userId = this.authService.getUserId();
+    if (!userId) {
       this.error = 'Usuário não autenticado.';
       return;
     }
-    this.loadProductsAndCart();
+
+    this.loadProductsAndCart(userId);
   }
 
-  loadProductsAndCart(): void {
+  loadProductsAndCart(userId: number): void {
     this.isLoading = true;
 
     this.http.get<{ data: ProductModel[] }>('/api/products').subscribe({
       next: (res) => {
         res.data.forEach(p => this.productsMap.set(p.id, p));
-        this.loadActiveCart();
+        this.loadActiveCart(userId);
       },
       error: () => {
         this.error = 'Erro ao buscar produtos.';
@@ -49,14 +49,13 @@ export class CartsComponent implements OnInit {
     });
   }
 
-  loadActiveCart(): void {
-    if (!this.userId) return;
-
-    this.http.get<{ data: CartResponse[] }>(`/api/carts?userId=${this.userId}`).subscribe({
+  loadActiveCart(userId: number): void {
+    this.http.get<{ data: CartResponse[] }>(`/api/carts?userId=${userId}`).subscribe({
       next: (res) => {
         const carts = res.data;
         const active = carts.find(c => c.status === CartStatus.Active)
           || carts.reverse().find(c => !c.status || c.status === CartStatus.Active);
+
         this.activeCart = active || null;
         this.isLoading = false;
       },
@@ -82,7 +81,7 @@ export class CartsComponent implements OnInit {
     }
 
     this.updateCart(this.activeCart.products);
-    this.loadProductsAndCart();
+    this.loadProductsAndCart(this.activeCart.userId);
   }
 
   removeItem(productId: number): void {
@@ -96,7 +95,7 @@ export class CartsComponent implements OnInit {
     }
 
     this.updateCart(remainingItems);
-    this.loadProductsAndCart();
+    this.loadProductsAndCart(this.activeCart.userId);
   }
 
   updateCart(updatedItems: CartItem[]): void {
@@ -144,4 +143,3 @@ export class CartsComponent implements OnInit {
     });
   }
 }
-
