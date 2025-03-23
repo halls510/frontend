@@ -23,16 +23,17 @@ export interface ProductRequest {
   rating: Rating;
 }
 
-export interface ProductsResponse {
-  data: Product[];   // Lista de produtos
-  success: boolean;  // Indica se a requisição foi bem-sucedida
-  message: string;   // Mensagem informativa
-  errors: string[];  // Lista de erros, se houver
+export interface RatingResponse {
+  rate: number;
+  count: number;
 }
 
 export interface ProductResponse {
-  data: Product;   // Lista de produtos
-  success: boolean;  // Indica se a requisição foi bem-sucedida
-  message: string;   // Mensagem informativa
-  errors: string[];  // Lista de erros, se houver
+  id: number;
+  title: string;
+  price: number;
+  description: string;
+  category: string;
+  image: string;
+  rating: RatingResponse;
 }

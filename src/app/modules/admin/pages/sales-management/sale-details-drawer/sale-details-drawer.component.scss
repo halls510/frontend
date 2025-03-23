@@ -27,6 +27,10 @@
   &.visible {
     right: 0;
   }
+ 
+  &.open {
+    right: 0;
+  }
 
   .drawer-header {
     display: flex;

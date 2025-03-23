@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 
 import { UsersManagementRoutingModule } from './users-management-routing.module';
 import { UsersManagementComponent } from './users-management.component';
-import { FormsModule } from '@angular/forms'; 
+import { ReactiveFormsModule, FormsModule } from '@angular/forms'; // ✅ IMPORTAR AQUI
 
 
 @NgModule({
@@ -14,7 +14,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     UsersManagementRoutingModule,
-    FormsModule 
+    FormsModule,
+    ReactiveFormsModule  
   ]
 })
 export class UsersManagementModule { }

@@ -8,16 +8,17 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  username = '';
+  email = '';
   password = '';
   errorMessage = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
   login(): void {
-    this.authService.login(this.username, this.password).subscribe({
+    this.authService.login(this.email, this.password).subscribe({
       next: () => this.router.navigate(['/home']), // ✅ Redireciona após login bem-sucedido
       error: () => this.errorMessage = 'Usuário ou senha inválidos'
     });
   }
+ 
 }

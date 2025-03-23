@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SalesListComponent } from './sales-list/sales-list.component';
 import { SaleDetailsComponent } from './sale-details/sale-details.component';
-import { SalesManagementRoutingModule } from './sales-management-routing.module';
-import { HttpClientModule } from '@angular/common/http';
 import { SaleDetailsDrawerComponent } from './sale-details-drawer/sale-details-drawer.component';
+import { RouterModule } from '@angular/router';
+import { SalesManagementRoutingModule } from './sales-management-routing.module';
+import { FormsModule } from '@angular/forms'; // ✅ Importar FormsModule aqui
 
 @NgModule({
   declarations: [
@@ -14,33 +15,9 @@ import { SaleDetailsDrawerComponent } from './sale-details-drawer/sale-details-d
   ],
   imports: [
     CommonModule,
-    HttpClientModule,
-    SalesManagementRoutingModule
+    SalesManagementRoutingModule,
+    RouterModule,
+    FormsModule
   ]
 })
-export class SalesManagementModule { }
-
-
-
-/*
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-import { SalesManagementRoutingModule } from './sales-management-routing.module';
-import { SalesListComponent } from './sales-list/sales-list.component';
-import { SaleDetailsComponent } from './sale-details/sale-details.component';
-
-
-@NgModule({
-  declarations: [
-    SalesListComponent,
-    SaleDetailsComponent
-  ],
-  imports: [
-    CommonModule,
-    SalesManagementRoutingModule
-  ]
-})
-export class SalesManagementModule { }
-
-*/
+export class SalesManagementModule {}

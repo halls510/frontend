@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SalesService } from '../sales.service';
-import { GetSaleResult } from 'src/app/models/sale.model';
+import { SalesService } from 'src/app/services/sales.service';
+import { GetSaleByIdResponse } from 'src/app/models/sale.model';
 
 @Component({
   selector: 'app-sale-details',
-  templateUrl: './sale-details.component.html'
+  templateUrl: './sale-details.component.html',
+  styleUrls: ['./sale-details.component.scss']
 })
 export class SaleDetailsComponent implements OnInit {
-  sale!: GetSaleResult;
+  sale: GetSaleByIdResponse | null = null;
+  isLoading = true;
+  errorMessage: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -16,27 +19,23 @@ export class SaleDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = +this.route.snapshot.paramMap.get('id')!;
-    this.salesService.getSaleById(id).subscribe((data) => {
-      this.sale = data;
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (isNaN(id)) {
+      this.errorMessage = 'ID de venda inválido.';
+      this.isLoading = false;
+      return;
+    }
+
+    this.salesService.getSaleById(id).subscribe({
+      next: (data) => {
+        this.sale = data;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error(error);
+        this.errorMessage = 'Erro ao carregar os detalhes da venda.';
+        this.isLoading = false;
+      }
     });
   }
 }
-
-
-
-
-
-
-/*
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-sale-details',
-  templateUrl: './sale-details.component.html',
-  styleUrls: ['./sale-details.component.scss']
-})
-export class SaleDetailsComponent {
-
-}
-*/

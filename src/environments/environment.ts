@@ -1,4 +1,5 @@
 export const environment = {
     production: false,
-    useMockApi: true // 🔥 Flag para ativar/desativar o MockInterceptor
+    useMockApi: false,
+    apiUrl: 'https://localhost:8081/api' 
   };  

@@ -1,3 +1,4 @@
+import { UserRole, UserStatus } from 'src/app/models/user.model';
 import { User } from '../models/user.model';
 
 export const MOCK_USERS: { data: User[]; success: boolean; message: string; errors: any[] } = {
@@ -6,8 +7,8 @@ export const MOCK_USERS: { data: User[]; success: boolean; message: string; erro
       id: 1, 
       name: 'Ana Souza', 
       email: 'ana.souza@email.com', 
-      role: 'Admin', // ✅ Garantindo que está no formato correto
-      status: 'Active', 
+      role: UserRole.Admin, 
+      status: UserStatus.Active, 
       address: {
         street: 'Av. Paulista',
         number: '123',
@@ -24,8 +25,8 @@ export const MOCK_USERS: { data: User[]; success: boolean; message: string; erro
       id: 2, 
       name: 'Carlos Oliveira', 
       email: 'carlos.oliveira@email.com', 
-      role: 'Manager', // ✅ Corrigido para garantir consistência
-      status: 'Active', 
+      role: UserRole.Manager, 
+      status: UserStatus.Active, 
       address: {
         street: 'Rua XV de Novembro',
         number: '456',
@@ -42,8 +43,8 @@ export const MOCK_USERS: { data: User[]; success: boolean; message: string; erro
       id: 3, 
       name: 'Mariana Lima', 
       email: 'mariana.lima@email.com', 
-      role: 'Customer', // ✅ Corrigido para garantir consistência
-      status: 'Inactive', 
+      role: UserRole.Customer, 
+      status: UserStatus.Active, 
       address: {
         street: 'Rua das Flores',
         number: '789',

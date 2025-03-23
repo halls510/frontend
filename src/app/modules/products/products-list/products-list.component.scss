@@ -58,7 +58,7 @@
 /* Grid de produtos */
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr); // 🔥 força 3 colunas fixas
   gap: 24px;
   justify-content: center;
 }
@@ -132,13 +132,13 @@ button svg {
 /* 🔹 Melhorando a responsividade */
 @media screen and (max-width: 900px) {
   .products-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr); // 📱 tablet
   }
 }
 
 @media screen and (max-width: 600px) {
   .products-grid {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(1, 1fr); // 📱 celular
   }
 }
 

@@ -1,12 +1,18 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs'; // ✅ Adicionando "of"
-import { catchError } from 'rxjs/operators'; // ✅ Importando "catchError"
-import { AnonymousSubject } from 'rxjs/internal/Subject';
-import { CategoriesResponse } from '../models/category.model';
-import { ProductsResponse, Product, ProductRequest, ProductResponse } from '../models/product.model';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
-const API_URL = '/api/products';
+import {
+  Product,
+  ProductRequest,
+  ProductResponse
+} from '../models/product.model';
+import { CategoriesResponse } from '../models/category.model';
+import { PaginatedResponse } from '../models/paginated-response.model';
+import { PaginationQuery } from '../models/pagination-query.model';
+
+const API_URL = `${environment.apiUrl}/products`;
 
 @Injectable({
   providedIn: 'root'
@@ -14,27 +20,73 @@ const API_URL = '/api/products';
 export class ProductsService {
   constructor(private http: HttpClient) {}
 
-  getProducts(): Observable<ProductsResponse> {  
-    return this.http.get<ProductsResponse>(`${API_URL}?_page=1&_size=100`);
+  // 📄 Lista de produtos com paginação e filtros
+  getProducts(query?: PaginationQuery): Observable<PaginatedResponse<ProductResponse>> {
+    const params = this.buildQueryParams(query);
+    return this.http.get<PaginatedResponse<ProductResponse>>(API_URL, { params });
   }
 
+  // 📄 Lista de produtos por categoria com paginação e filtros
+  getProductsByCategory(category: string, query?: PaginationQuery): Observable<PaginatedResponse<ProductResponse>> {
+    const params = this.buildQueryParams(query);
+    return this.http.get<PaginatedResponse<ProductResponse>>(`${API_URL}/category/${category}`, { params });
+  }
+
+  // 🗂️ Lista de categorias
   getCategories(): Observable<CategoriesResponse> {
     return this.http.get<CategoriesResponse>(`${API_URL}/categories`);
   }
 
-  getProductById(id: number): Observable<any> {
-    return this.http.get(`${API_URL}/${id}`);
+  // 🔍 Detalhe do produto
+  getProductById(id: number): Observable<ProductResponse> {
+    return this.http.get<ProductResponse>(`${API_URL}/${id}`);
   }
 
-  createProduct(product: any): Observable<any> {
-    return this.http.post(API_URL, product);
+  // ➕ Criação de produto
+  createProduct(product: ProductRequest): Observable<ProductResponse> {
+    return this.http.post<ProductResponse>(API_URL, product);
   }
 
+  // ✏️ Atualização de produto
   updateProduct(id: number, product: ProductRequest): Observable<ProductResponse> {
     return this.http.put<ProductResponse>(`${API_URL}/${id}`, product);
   }
 
-  deleteProduct(id: number): Observable<any> {
-    return this.http.delete(`${API_URL}/${id}`);
+  // ❌ Remoção de produto
+  deleteProduct(id: number): Observable<void> {
+    return this.http.delete<void>(`${API_URL}/${id}`);
+  }
+
+  // ⚙️ Gera HttpParams conforme estrutura esperada pela API
+  private buildQueryParams(query?: PaginationQuery): HttpParams {
+    let params = new HttpParams();
+
+    if (!query) return params;
+
+    if (query._page != null) {
+      params = params.set('_page', query._page.toString());
+    }
+
+    if (query._size != null) {
+      params = params.set('_size', query._size.toString());
+    }
+
+    if (query._order) {
+      params = params.set('_order', query._order);
+    }
+
+    if (query.filters) {
+      for (const key in query.filters) {
+        const values = query.filters[key];
+        if (Array.isArray(values)) {
+          values.forEach(value => {        
+            params = params.append(`${key}`, value);
+          });
+        }
+      }
+    }
+
+    return params;
   }
 }
+
