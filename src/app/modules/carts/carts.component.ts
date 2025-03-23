@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import {
-  CartResponse,
-  CartStatus,
-  CartItem
-} from 'src/app/models/cart.model';
+import { CartResponse, CartStatus, CartItem } from 'src/app/models/cart.model';
 import { Product as ProductModel } from 'src/app/models/product.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { CartsService } from 'src/app/services/carts.service';
+import { ProductsService } from 'src/app/services/products.service';
 
 @Component({
   selector: 'app-carts',
@@ -20,8 +17,9 @@ export class CartsComponent implements OnInit {
   error: string | null = null;
 
   constructor(
-    private http: HttpClient,
-    private authService: AuthService
+    private authService: AuthService,
+    private cartsService: CartsService,
+    private productsService: ProductsService
   ) {}
 
   ngOnInit(): void {
@@ -30,39 +28,57 @@ export class CartsComponent implements OnInit {
       this.error = 'Usuário não autenticado.';
       return;
     }
-
-    this.loadProductsAndCart(userId);
-  }
-
-  loadProductsAndCart(userId: number): void {
-    this.isLoading = true;
-
-    this.http.get<{ data: ProductModel[] }>('/api/products').subscribe({
-      next: (res) => {
-        res.data.forEach(p => this.productsMap.set(p.id, p));
-        this.loadActiveCart(userId);
-      },
-      error: () => {
-        this.error = 'Erro ao buscar produtos.';
-        this.isLoading = false;
-      }
-    });
+    this.loadActiveCart(userId);
   }
 
   loadActiveCart(userId: number): void {
-    this.http.get<{ data: CartResponse[] }>(`/api/carts?userId=${userId}`).subscribe({
+    this.isLoading = true;
+
+    this.cartsService.getCartByUserId(userId).subscribe({
       next: (res) => {
         const carts = res.data;
         const active = carts.find(c => c.status === CartStatus.Active)
           || carts.reverse().find(c => !c.status || c.status === CartStatus.Active);
 
         this.activeCart = active || null;
-        this.isLoading = false;
+
+        if (this.activeCart?.products?.length) {
+          this.loadProductsFromCart(this.activeCart.products);
+        } else {
+          this.isLoading = false;
+        }
       },
-      error: () => {
-        this.error = 'Erro ao buscar o carrinho.';
+      error: (err) => {
+        console.error('❌ Erro ao buscar carrinho:', err);
+        this.error = 'Erro ao buscar carrinho.';
         this.isLoading = false;
       }
+    });
+  }
+
+  loadProductsFromCart(cartItems: CartItem[]): void {
+    const productIds = [...new Set(cartItems.map(item => item.productId))];
+    let loadedCount = 0;
+    this.productsMap.clear();
+    this.isLoading = true;
+
+    productIds.forEach(productId => {
+      this.productsService.getProductById(productId).subscribe({
+        next: (res) => {
+          const product = res.data;
+          this.productsMap.set(product.id, product);
+          loadedCount++;
+
+          if (loadedCount === productIds.length) {
+            this.isLoading = false;
+          }
+        },
+        error: (err) => {
+          console.error(`❌ Erro ao buscar produto #${productId}:`, err);
+          this.error = `Erro ao buscar produto com ID ${productId}`;
+          this.isLoading = false;
+        }
+      });
     });
   }
 
@@ -71,7 +87,7 @@ export class CartsComponent implements OnInit {
   }
 
   onQuantityChange(item: CartItem): void {
-    if (!this.activeCart || !this.activeCart.products) return;
+    if (!this.activeCart?.products) return;
 
     if (item.quantity > 20) {
       alert('❌ Máximo permitido: 20 unidades.');
@@ -81,24 +97,23 @@ export class CartsComponent implements OnInit {
     }
 
     this.updateCart(this.activeCart.products);
-    this.loadProductsAndCart(this.activeCart.userId);
   }
 
   removeItem(productId: number): void {
-    if (!this.activeCart || !this.activeCart.products) return;
+    if (!this.activeCart?.products) return;
 
-    const remainingItems = this.activeCart.products.filter(p => p.productId !== productId);
-
-    if (remainingItems.length === 0) {
+    const remaining = this.activeCart.products.filter(p => p.productId !== productId);
+    if (remaining.length === 0) {
       alert('O carrinho não pode ficar vazio.');
       return;
     }
 
-    this.updateCart(remainingItems);
-    this.loadProductsAndCart(this.activeCart.userId);
+    this.updateCart(remaining);
   }
 
   updateCart(updatedItems: CartItem[]): void {
+    if (!this.activeCart) return;
+
     const updatedProducts: CartItem[] = updatedItems.map(p => {
       const product = this.productsMap.get(p.productId);
       const unitPrice = product?.price ?? p.unitPrice;
@@ -112,15 +127,16 @@ export class CartsComponent implements OnInit {
     });
 
     const updateRequest = {
-      userId: this.activeCart!.userId,
+      userId: this.activeCart.userId,
       date: new Date().toISOString(),
       products: updatedProducts
     };
 
-    this.http.put<CartResponse>(`/api/carts/${this.activeCart!.id}`, updateRequest).subscribe({
-      next: (updatedCart) => {
-        this.activeCart = updatedCart;
-        console.log('✅ Carrinho atualizado');
+    this.cartsService.updateCart(this.activeCart.id, updateRequest).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.activeCart = res.data;
+        this.loadProductsFromCart(res.data.products);
       },
       error: (err) => {
         console.error('Erro ao atualizar carrinho:', err);
@@ -132,10 +148,11 @@ export class CartsComponent implements OnInit {
   checkout(): void {
     if (!this.activeCart) return;
 
-    this.http.post(`/api/carts/${this.activeCart.id}/checkout`, null).subscribe({
+    this.cartsService.checkoutCart(this.activeCart.id).subscribe({
       next: () => {
-        alert('✅ Checkout finalizado com sucesso!');
+        alert('✅ Checkout realizado com sucesso!');
         this.activeCart = null;
+        this.productsMap.clear();
       },
       error: () => {
         alert('Erro ao realizar checkout.');

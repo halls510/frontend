@@ -6,6 +6,8 @@ import { PaginationQuery } from 'src/app/models/pagination-query.model';
 import { CartsService } from 'src/app/services/carts.service';
 import { CartItem, CartRequest, CartResponse, CartStatus } from 'src/app/models/cart.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { ApiResponseWithData } from 'src/app/models/api-response-with-data.model';
+import { PaginatedResponse } from 'src/app/models/paginated-response.model';
 
 @Component({
   selector: 'app-products-list',
@@ -70,7 +72,7 @@ export class ProductsListComponent implements OnInit {
     };
 
     this.productsService.getProducts(query).subscribe({
-      next: (res) => {
+      next: (res: PaginatedResponse<ProductResponse>) => {
         this.products = res.data.map(product => ({
           ...product,
           image: product.image || 'assets/default-product.jpg'
@@ -132,9 +134,9 @@ export class ProductsListComponent implements OnInit {
       };
 
       this.cartService.createCart(newCart).subscribe({
-        next: (createdCart) => {
-          this.cart = createdCart;
-          console.log('✅ Carrinho criado, ID:', createdCart.id);
+        next: (res: ApiResponseWithData<CartResponse>) => {
+          this.cart = res.data;
+          console.log('✅ Carrinho criado, ID:', res.data.id);
           alert(`${product.title} foi adicionado ao carrinho!`);
         },
         error: (err) => {
@@ -192,9 +194,9 @@ export class ProductsListComponent implements OnInit {
       };
 
       this.cartService.updateCart(cart.id, updateRequest).subscribe({
-        next: (updatedCart) => {
-          this.cart = updatedCart;
-          console.log('📝 Carrinho atualizado, ID:', updatedCart.id);
+        next: (res: ApiResponseWithData<CartResponse>) => {
+          this.cart = res.data;
+          console.log('📝 Carrinho atualizado, ID:', res.data.id);
           alert(`${product.title} foi adicionado ao carrinho!`);
         },
         error: (err) => {

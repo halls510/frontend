@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { CartRequest, CartResponse } from '../models/cart.model';
 import { PaginatedResponse } from '../models/paginated-response.model';
 import { PaginationQuery } from '../models/pagination-query.model';
+import { ApiResponseWithData } from '../models/api-response-with-data.model';
 
 const API_URL = `${environment.apiUrl}/carts`;
 
@@ -22,29 +23,34 @@ export class CartsService {
   }
 
   // 🔍 Detalhe do carrinho por ID
-  getCartById(id: number): Observable<CartResponse> {
-    return this.http.get<CartResponse>(`${API_URL}/${id}`);
+  getCartById(id: number): Observable<ApiResponseWithData<CartResponse>> {
+    return this.http.get<ApiResponseWithData<CartResponse>>(`${API_URL}/${id}`);
   }
 
   // 🔍 Buscar carrinho por userId via filtro
-  getCartByUserId(userId: number): Observable<CartResponse> {
+  getCartByUserId(userId: number): Observable<ApiResponseWithData<CartResponse[]>> {
     const params = new HttpParams().append('UserId', userId.toString());
-    return this.http.get<CartResponse>(API_URL, { params });
+    return this.http.get<ApiResponseWithData<CartResponse[]>>(API_URL, { params });
   }
 
   // ➕ Criar novo carrinho
-  createCart(cart: CartRequest): Observable<CartResponse> {
-    return this.http.post<CartResponse>(API_URL, cart);
+  createCart(cart: CartRequest): Observable<ApiResponseWithData<CartResponse>> {
+    return this.http.post<ApiResponseWithData<CartResponse>>(API_URL, cart);
   }
 
   // ✏️ Atualizar carrinho existente
-  updateCart(id: number, cart: CartRequest): Observable<CartResponse> {
-    return this.http.put<CartResponse>(`${API_URL}/${id}`, cart);
+  updateCart(id: number, cart: CartRequest): Observable<ApiResponseWithData<CartResponse>> {
+    return this.http.put<ApiResponseWithData<CartResponse>>(`${API_URL}/${id}`, cart);
   }
 
   // ❌ Remover carrinho
   deleteCart(id: number): Observable<void> {
     return this.http.delete<void>(`${API_URL}/${id}`);
+  }
+
+  // ✅ Finalizar (checkout) carrinho
+  checkoutCart(id: number): Observable<void> {
+    return this.http.post<void>(`${API_URL}/${id}/checkout`, null);
   }
 
   // ⚙️ Monta os parâmetros para paginação, filtros e ordenação
